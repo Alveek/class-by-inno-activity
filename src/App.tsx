@@ -10,32 +10,47 @@ import {
 import { useState } from 'react';
 
 function App() {
-  const [message, setMessage] = useState('');
-  const [question2, setQuestion2] = useState(false);
-  const [question3, setQuestion3] = useState(false);
   const [shareOfInnovationCosts, setShareOfInnovationCosts] = useState(0);
+  const [investmentShares, setInvestmentShares] = useState(0);
+  const [message1, setMessage1] = useState('');
+  const [message2, setMessage2] = useState('');
+  const [message3, setMessage3] = useState('');
+  const [question2, setQuestion2] = useState(false);
+  const [question3, setQuestion3] = useState(true);
 
   const getShareOfInnResults = (value: number) => {
     if (value >= 3.35) {
-      setMessage(
-        'Уровень инновационной активности значительно выше среднеотраслевого, лидерство по инновациям'
+      setMessage1(
+        'Уровень инновационной активности значительно выше среднеотраслевого, лидерство по инновациям.'
       );
     } else if (value <= 0.45) {
-      setMessage(
-        'Инновационная активность отсутствует, нет инновационного развития'
-      );
-    } else if (value >= 0.45 && value <= 1.35) {
-      setMessage('Уровнь инновационной активности ниже среднеотраслевого');
-    } else if (value >= 0.45 && value < 3.35) {
-      setMessage(
-        'Уровень инновационной активности самый низкий в отрасли, "отставание по инновациям"'
+      setMessage1(
+        'Инновационная активность отсутствует, нет инновационного развития.'
       );
     } else if (value >= 1.35 && value < 3.35) {
+      setMessage1(
+        'Уровень инновационной активности самый низкий в отрасли, "отставание по инновациям".'
+      );
       setQuestion2(true);
+    } else if (value >= 0.45 && value < 1.35) {
+      setMessage1('Уровнь инновационной активности ниже среднеотраслевого.');
     }
   };
 
-  console.log(shareOfInnovationCosts);
+  const getInfluenceResult = (value: string) => {
+    console.log(value);
+    if (value === 'weak') {
+      setMessage2(
+        'При уровне инновационной активности выше среднеотраслевого, результаты инновационной деятельности слабо влияют на стандарты промышленности.'
+      );
+    } else {
+      setQuestion3(true);
+    }
+  };
+
+  const getInvestmentSharesResult = (value: number) => {
+    console.log(value);
+  };
 
   return (
     <Container maxW="container.lg" bg="green.50" py={6}>
@@ -64,6 +79,15 @@ function App() {
         >
           Рассчитать
         </Button>
+
+        {message1 && (
+          <>
+            <Text fontWeight="bold" mt={4}>
+              Вывод:{' '}
+            </Text>
+            <Text>{message1}</Text>
+          </>
+        )}
       </Box>
 
       {question2 && (
@@ -71,14 +95,28 @@ function App() {
           <Text mb={4}>
             Выберите степень влияния результатов инновационной деятельности на
             соответствие требованиям регламентов и стандартов в промышленности
-            (слабое, среднее или низкое)
+            (слабое, среднее или низкое):
           </Text>
 
-          <Select placeholder="Выберите из списка" maxW="220px">
-            <option value="option1">Слабое</option>
-            <option value="option2">Среднее</option>
-            <option value="option3">Низкое</option>
+          <Select
+            onChange={(e) => getInfluenceResult(e.target.value)}
+            placeholder="Выберите из списка"
+            maxW="220px"
+            isDisabled={question3}
+          >
+            <option value="weak">Слабое</option>
+            <option value="medium">Среднее</option>
+            <option value="low">Низкое</option>
           </Select>
+
+          {message2 && (
+            <>
+              <Text fontWeight="bold" mt={4}>
+                Вывод:{' '}
+              </Text>
+              <Text>{message2}</Text>
+            </>
+          )}
         </Box>
       )}
 
@@ -89,15 +127,22 @@ function App() {
             производства в общей величине инвестиций
           </Text>
 
-          <Input type="number" maxW="100px" borderRadius={0} />
-          <Button colorScheme="blue" borderRadius={0}>
+          <Input
+            onChange={(e) => setInvestmentShares(Number(e.target.value))}
+            type="number"
+            maxW="100px"
+            borderRadius={0}
+          />
+          <Button
+            onClick={() => getInvestmentSharesResult(investmentShares)}
+            colorScheme="blue"
+            borderRadius={0}
+            isDisabled={!investmentShares}
+          >
             Рассчитать
           </Button>
         </Box>
       )}
-
-      <Text fontWeight="bold">Вывод: </Text>
-      <Text>{message}</Text>
     </Container>
   );
 }
