@@ -16,7 +16,7 @@ function App() {
   const [message2, setMessage2] = useState('');
   const [message3, setMessage3] = useState('');
   const [question2, setQuestion2] = useState(false);
-  const [question3, setQuestion3] = useState(true);
+  const [question3, setQuestion3] = useState(false);
 
   const getShareOfInnResults = (value: number) => {
     if (value >= 3.35) {
@@ -38,7 +38,6 @@ function App() {
   };
 
   const getInfluenceResult = (value: string) => {
-    console.log(value);
     if (value === 'weak') {
       setMessage2(
         'При уровне инновационной активности выше среднеотраслевого, результаты инновационной деятельности слабо влияют на стандарты промышленности.'
@@ -49,11 +48,19 @@ function App() {
   };
 
   const getInvestmentSharesResult = (value: number) => {
-    console.log(value);
+    if (value < 13.1) {
+      setMessage3(
+        'При уровне инновационной активности выше среднеотраслевого, результаты инновационной деятельности  влияют на стандарты промышленности, однако требуются дополнительные инвестиции на инновационное развитие.'
+      );
+    } else {
+      setMessage3(
+        'При уровне инновационной активности выше среднеотраслевого, результаты инновационной деятельности  влияют на стандарты промышленности и объем инвестиций в инновационное развитие превышает среднеотраслевой уровень.'
+      );
+    }
   };
 
   return (
-    <Container maxW="container.lg" bg="green.50" py={6}>
+    <Container maxW="container.md" py={6}>
       <Heading as="h1" size="lg" textAlign="center" mb={6}>
         Алгоритм классификации отраслей промышленности и предприятий по уровню
         инновационной активности
@@ -102,7 +109,6 @@ function App() {
             onChange={(e) => getInfluenceResult(e.target.value)}
             placeholder="Выберите из списка"
             maxW="220px"
-            isDisabled={question3}
           >
             <option value="weak">Слабое</option>
             <option value="medium">Среднее</option>
@@ -141,6 +147,15 @@ function App() {
           >
             Рассчитать
           </Button>
+
+          {message3 && (
+            <>
+              <Text fontWeight="bold" mt={4}>
+                Вывод:{' '}
+              </Text>
+              <Text>{message3}</Text>
+            </>
+          )}
         </Box>
       )}
     </Container>
