@@ -43,6 +43,7 @@ function App() {
         'При уровне инновационной активности выше среднеотраслевого, результаты инновационной деятельности слабо влияют на стандарты промышленности.'
       );
     } else {
+      setMessage2('');
       setQuestion3(true);
     }
   };
@@ -61,7 +62,7 @@ function App() {
 
   return (
     <Container maxW="container.md" py={6}>
-      <Heading as="h1" size="lg" textAlign="center" mb={6}>
+      <Heading as="h1" size="lg" textAlign="center" mb={6} mt={4}>
         Алгоритм классификации отраслей промышленности и предприятий по уровню
         инновационной активности
       </Heading>
